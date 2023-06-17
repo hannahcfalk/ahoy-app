@@ -1,23 +1,27 @@
 import logo from './logo.svg';
 import './App.css';
+import { useState } from 'react';
+import Axios from 'axios';
 
 function App() {
+
+    const [userInput, setUserInput] = useState(0);
+
+    function input(s) {
+        Axios.post(`http://localhost:8000/input`, {
+            input: s
+        }).then((res) => {
+            let stringLength = res.data["stringLength"];
+            setUserInput(stringLength);
+        })
+    }
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+        <p>You have entered a message with {userInput} characters!</p>
+      <div>
+        <textarea id="user-input" onChange={(e) => input(e.target.value)}></textarea>
+      </div>
     </div>
   );
 }
